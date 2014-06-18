@@ -16,7 +16,7 @@ del sb
 @register_cell_magic
 def sb(arg, cell_content):
     if arg == "run":
-        job_name = ".sb_magic_job-%s.py" % str(uuid4())[:13]
+        job_name = "sb_magic_job-%s.py" % str(uuid4())[:13]
         try:
             print(cell_content,file=open(job_name,"w"))
             p = sp.Popen(["sb", "run", "python", job_name],
@@ -28,6 +28,10 @@ def sb(arg, cell_content):
             try:
                 os.remove(job_name)
             except OSError:
+                pass
+            try:
+                sp.check_call(["sb", "rm", job_name])
+            except:
                 pass
 
 # We delete these to avoid name conflicts for automagic to work
